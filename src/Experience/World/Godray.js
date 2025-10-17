@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience'
-import Vertex from '../Shaders/Godray/Vertex.glsl'
+import Vertex from '../Shaders/Godray/vertex.glsl'
 import Fragment from '../Shaders/Godray/fragment.glsl'
 
 export default class Godray
