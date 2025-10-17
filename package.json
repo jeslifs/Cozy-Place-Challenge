@@ -1,0 +1,20 @@
+{
+  "name": "Cozy Place Challenge",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^6.2.2",
+    "vite-plugin-restart": "^0.4.2"
+  },
+  "dependencies": {
+    "lil-gui": "^0.20.0",
+    "three": "^0.180.0",
+    "three-custom-shader-material": "^6.4.0",
+    "vite-plugin-glsl": "^1.5.4"
+  }
+}
