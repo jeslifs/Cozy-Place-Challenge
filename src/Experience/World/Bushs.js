@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import Experience from '../Experience'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
-import Vertex from '../Shaders/Bushes/Vertex.glsl'
+import Vertex from '../Shaders/Bushes/vertex.glsl'
 import Fragment from '../Shaders/Bushes/fragment.glsl'
 
 export default class Bushs
