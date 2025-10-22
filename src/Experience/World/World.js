@@ -3,10 +3,10 @@ import Experience from '../Experience'
 import Environment from './Environment'
 import Godray from './Godray'
 import CozyPlace from './CozyPlace'
-import Bushs from './Bushs'
-
-// import Floor from './Floor'
-// import Fox from './Fox'
+import Sky from './Sky'
+import FireFlies from './FireFlies'
+import Dance from './Dance'
+import Song from './Song'
 
 export default class World
 {
@@ -23,13 +23,15 @@ export default class World
         this.resources.on('ready', () => 
         {
             // Setup
+            this.song = new Song()
             this.godray = new Godray()
             this.cozyplace = new CozyPlace()
+            this.fireflies = new FireFlies()
             // this.bushes = new Bushs(this.cozyplace.placeholder)
-            this.environment = new Environment(this.cozyplace.placeholder)
+            this.sky = new Sky()
+            this.dance = new Dance()
+            this.environment = new Environment(this.cozyplace.placeholder, this.cozyplace.tent)
         })
-
-
         
     }
 
@@ -50,5 +52,9 @@ export default class World
             this.godray.update()
         if(this.environment)
             this.environment.update()
+        if(this.dance)
+            this.dance.update()
+        if(this.fireflies)
+            this.fireflies.update()
     }
 }

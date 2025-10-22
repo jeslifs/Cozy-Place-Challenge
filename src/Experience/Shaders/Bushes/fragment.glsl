@@ -8,6 +8,11 @@ uniform vec3 uDirectionalLigt1Position;
 uniform vec3 uDirectionalLigt2;
 uniform float uDirectionalLigt2Intensity;
 uniform vec3 uDirectionalLigt2Position;
+uniform vec3 uCampLight;
+uniform float uCampLightIntensity;
+uniform vec3 uCampLightPosition;
+uniform float uCampLightSpecular;
+uniform float uCampLightDecay;
 
 varying vec2 vUv;
 // varying vec3 vNormal;
@@ -16,6 +21,7 @@ varying vec3 vModelPosition;
 
 #include ../includes/ambientLight.glsl
 #include ../includes/directionalLight.glsl
+
 
 void main()
 {
@@ -26,10 +32,6 @@ void main()
 
     float alpha = texture2D(uAlphaMap, vUv).r;
 
-    if(alpha < 0.05)
-    {
-        discard;
-    }
 
     // lights
     vec3 light = vec3(0.0);

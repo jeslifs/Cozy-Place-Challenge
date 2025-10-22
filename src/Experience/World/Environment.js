@@ -1,22 +1,26 @@
 import * as THREE from 'three'
 import Experience from '../Experience'
 import Bushs from './Bushs'
+import Fire from './Fire'
+import Smoke from './Smoke'
 
 
 export default class Environment
 {
-    constructor(placeholder)
+    constructor(placeholder, tent)
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.debug = this.experience.debug
+        this.tent = tent
 
         // Parameters
         this.ambientLightParameters = {
             color: '#B6F9FF',
             // color:0x000fe6,
-            intensity: 0.375,
+            // intensity: 0.375,
+            intensity: 0.159,
         }
 
         this.directionalLight1Parameters = {
@@ -27,6 +31,11 @@ export default class Environment
         this.directionalLight2Parameters = {
             color: '#FF9CB1',
             intensity: 0.156,
+        }
+
+        this.campLightParameters = {
+            color: '#ff9500',
+            intensity: 0.481
         }
 
         // bush setup
@@ -44,48 +53,42 @@ export default class Environment
             this.debugFolder.close()
         }
 
-        // this.setSunlight()
         this.setAmbientLight()
         this.setDirectionalLights()
-        // this.setHemisphereLight()
+        this.setFire()
+        this.setSmoke()
+        this.setCampLights()
         this.setEnvironmentMap()
     }
 
-    setHemisphereLight()
+    setFire()
     {
-        this.hemisphereLight = new THREE.HemisphereLight(this.directionalLight1Parameters.color, this.directionalLight2Parameters.color, 0.5)
-        this.scene.add(this.hemisphereLight)
-
-        if(this.debug.active)
-        {
-            this.hemisphereLightHelper = new THREE.HemisphereLightHelper(this.hemisphereLight, 1); // The '1' is the size of the helper
-            
-            this.scene.add(this.hemisphereLightHelper);
-
-            const hemisphereFolder = this.debugFolder.addFolder('Hemisphere Light')
-            hemisphereFolder.add(this.hemisphereLight, 'intensity').min(0).max(2).step(0.001).name('intensity')
-            hemisphereFolder.addColor(this.hemisphereLight, 'color').name('skyColor')
-            hemisphereFolder.addColor(this.hemisphereLight, 'groundColor').name('groundColor')
-        }
+        this.firePlaceholder = this.tent.find(mesh => mesh.name === 'fire')
+        this.fire = new Fire(this.firePlaceholder)
     }
 
-    setSunlight()
+    setSmoke()
     {
-        this.sunlight = new THREE.DirectionalLight(0xffffff, 4)
-        this.sunlight.castShadow = true
-        this.sunlight.shadow.camera.far = 15
-        this.sunlight.shadow.mapSize.set(1024, 1024)
-        this.sunlight.shadow.normalBias = 0.05
-        this.sunlight.position.set(3.5, 2, -1.25)
-        this.scene.add(this.sunlight)
+        this.smokeplaceholder = this.tent.find(mesh => mesh.name === 'smoke')
+        this.smokes = new Smoke(this.smokeplaceholder)
+    }
 
-        // Debug
+    setCampLights()
+    {
+        this.campLight = new THREE.PointLight(this.campLightParameters.color, this.campLightParameters.intensity)
+        this.campLight.position.set(-1.42, 0.41, -1.03)
+        this.scene.add(this.campLight)
+
         if(this.debug.active)
         {
-            this.debugFolder.add(this.sunlight, 'intensity').min(0).max(10).step(0.001).name('sunlightIntensity')
-            this.debugFolder.add(this.sunlight.position, 'x').min(-5).max(5).step(0.001).name('sunlightX')
-            this.debugFolder.add(this.sunlight.position, 'y').min(-5).max(5).step(0.001).name('sunlightY')
-            this.debugFolder.add(this.sunlight.position, 'z').min(-5).max(5).step(0.001).name('sunlightZ')
+            this.campFolder = this.debugFolder.addFolder('Point Light')
+            this.campFolder.close()
+            this.campFolder.add(this.campLight, 'intensity').min(0).max(2).step(0.001).name('campLightIntensity')
+            this.campFolder.add(this.campLight.position, 'x').min(-5).max(5).name('campLightX')
+            this.campFolder.add(this.campLight.position, 'y').min(-5).max(5).name('campLightY')
+            this.campFolder.add(this.campLight.position, 'z').min(-5).max(5).name('campLightZ')     
+            this.campFolder.addColor(this.campLightParameters, 'color').name('campLightColor').onChange(()=> this.campLight.color.set(this.campLightParameters.color))
+            
         }
     }
 
@@ -133,7 +136,8 @@ export default class Environment
         if(this.debug.active)
         {
             this.ambientFolder = this.debugFolder.addFolder('Ambient Light')
-            this.ambientFolder.addColor(this.ambientLightParameters, 'color').onChange(() => {
+            this.ambientFolder.close()
+            this.ambientFolder.addColor(this.ambientLightParameters, 'color').name('ambientLightColor').onChange(() => {
                 this.ambientLight.color.set(this.ambientLightParameters.color)
                 this.bush.material.uniforms.uAmbientLight.value.set(this.ambientLightParameters.color)
             })
@@ -142,7 +146,7 @@ export default class Environment
                 this.bush.material.uniforms.uAmbientLightIntensity.value = (this.ambientLightParameters.intensity)
 
             })
-            this.ambientFolder.close()
+            
         }
     }
 
@@ -245,6 +249,10 @@ export default class Environment
     {
         if(this.bush)
             this.bush.update()
+        if(this.fire)
+            this.fire.update()
+        if(this.smokes)
+            this.smokes.update()
     }
 
 }

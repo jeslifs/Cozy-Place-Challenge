@@ -12,6 +12,7 @@ export default class CozyPlace
         this.resource = this.resources.items.cozyplace
         // console.log(this.resource)
         this.placeholder = []
+        this.tent = []
         
 
         this.setModel()
@@ -23,7 +24,7 @@ export default class CozyPlace
         this.model = this.resource.scene
         this.model.traverse((child) =>
         {
-            // console.log(child.name)
+            // console.log(child, child.name)
             if(child instanceof THREE.Object3D)
             {
                 if(child.name !== 'grass')
@@ -31,7 +32,15 @@ export default class CozyPlace
                     child.castShadow = true
                     // child.receiveShadow = true
                 }
-                else
+                if((child.name === 'fire') || (child.name === 'smoke'))
+                {
+                    child.castShadow = false
+                    // console.log(child, 'hi')
+                    
+                    this.tent.push(child)
+
+                }
+                if(child.name === 'grass')
                 {
                     child.receiveShadow = true
                 }
@@ -41,13 +50,11 @@ export default class CozyPlace
                 // console.log(child.name, child.parent.name)
                 // console.log(child.position);
                 this.placeholder.push(child)
-                child.castShadow = true
-
-                
-                
+                // child.castShadow = true
             }
+            
         })
-        // console.log(this.model)
+        // console.log(this.tent)
         
         this.scene.add(this.model)
         // this.scene.updateMatrixWorld(true)

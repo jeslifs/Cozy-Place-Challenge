@@ -17,14 +17,7 @@ export default [
         type: 'texture',
         path: 'textures/noise/perlin.png'
     },
-    // {
-    
-    //     name: 'vornoiTexture',
-    //     type: 'texture',
-    //     path: 'textures/noise/vornoi.png'
-    // },
     {
-    
         name: 'bushTextureAlpha',
         type: 'texture',
         path: 'textures/bush/bushAlpha.png'
@@ -39,6 +32,12 @@ export default [
     {
         name: 'cozyplace',
         type: 'gltfModel',
-        path: 'models/Place/cozy.glb'
+        path: 'models/Place/place.glb'
+    },
+    {
+    
+        name: 'dancemodel',
+        type: 'gltfModel',
+        path: 'models/Place/dancing.glb'
     }
 ]

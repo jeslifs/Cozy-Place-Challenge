@@ -108,6 +108,7 @@ export default class Bushs
         {
             this.debugFolder.add(this.material.uniforms.uWindStrength, 'value').min(0).max(5).step(0.001).name('uWindStrength')
             this.debugFolder.add(this.material.uniforms.uWindSpeed, 'value').min(0).max(5).step(0.001).name('uWindSpeed')
+            // this.debugFolder.add(this.material, 'alphaTest').min(0).max(1).step(0.01)
         }
 
     }
@@ -178,11 +179,12 @@ export default class Bushs
             fragmentShader: Fragment,
             // alphaMap: this.resource.bushAlpha,
             uniforms: this.uniform,
-            transparent: true,
+            // transparent: true,
             // alphaHash: true,
             // alphaTest: true,
             // colorWrite: true,
             side: THREE.DoubleSide,
+            alphaTest: 0.5,
             // opacity:1,
             // dithering: true,
             // depthWrite: false,

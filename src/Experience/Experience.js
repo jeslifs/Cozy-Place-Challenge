@@ -3,6 +3,7 @@ import Sizes from "./Utils/Sizes"
 import Time from "./Utils/Time"
 import Camera from './Camera'
 import Renderer from './Renderer'
+// import Stat from './Utils/Stats'
 import World from './World/World'
 import Resources from './Utils/Resources'
 import sources from './sources'
@@ -38,6 +39,9 @@ export default class Experience
         this.renderer = new Renderer()
         this.world = new World()
 
+        // if(this.debug.active)
+        //     this.stats = new Stat()
+
 
         // Sizes Resize event
         this.sizes.on('resize', () => 
@@ -63,9 +67,11 @@ export default class Experience
 
     update()
     {
+        // this.stats.begin()
         this.camera.update()
         this.world.update()
         this.renderer.update()
+        // this.stats.end()
     }
 
     destroy()

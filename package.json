@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "lil-gui": "^0.20.0",
+    "stats.js": "^0.17.0",
     "three": "^0.180.0",
     "three-custom-shader-material": "^6.4.0",
     "vite-plugin-glsl": "^1.5.4"
