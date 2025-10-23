@@ -76,7 +76,7 @@ export default class Environment
     setCampLights()
     {
         this.campLight = new THREE.PointLight(this.campLightParameters.color, this.campLightParameters.intensity)
-        this.campLight.position.set(-1.42, 0.41, -1.03)
+        this.campLight.position.set(-1.42, -0.009, -1.03)
         this.scene.add(this.campLight)
 
         if(this.debug.active)

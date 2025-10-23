@@ -22,7 +22,7 @@ export default class Dance
     {
         this.model = this.resource.scene
         this.model.scale.set(0.5, 0.5, 0.5)
-        this.scene.add(this.model)
+        this.model.position.set(0, -0.5, 0)
 
         this.model.traverse((child) =>
         {
@@ -31,6 +31,7 @@ export default class Dance
                 child.castShadow = true
             }
         })
+        this.scene.add(this.model)
     }
 
     setAnimation()

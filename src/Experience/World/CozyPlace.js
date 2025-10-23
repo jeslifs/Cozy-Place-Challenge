@@ -55,8 +55,6 @@ export default class CozyPlace
             
         })
         // console.log(this.tent)
-        
         this.scene.add(this.model)
-        // this.scene.updateMatrixWorld(true)
     }
 }

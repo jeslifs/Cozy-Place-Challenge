@@ -86,6 +86,7 @@ export default class FireFlies
     setFireFlies()
     {
         this.fireflies = new THREE.Points(this.firefliesgeometry, this.material)
+        this.fireflies.position.y = -0.5
         this.scene.add(this.fireflies)
         
     }

@@ -89,8 +89,8 @@ export default class Godray
     setGodray()
     {
         this.godray = new THREE.Mesh(this.geometry, this.material)
-        this.godray.position.y = 3.313
-        this.godray.position.x = 2.084
+        this.godray.position.y = 2.66
+        this.godray.position.x = 1.789
         this.godray.position.z = -1.358
         this.godray.rotation.x = 2.817
         this.godray.rotation.y = -0.117
@@ -111,7 +111,7 @@ export default class Godray
             this.debugFolder.add(this.godray.position, 'y').min(-10).max(10).step(0.001).name('positionY')
             this.debugFolder.add(this.godray.position, 'z').min(-10).max(10).step(0.001).name('positionZ')
             this.debugFolder.add(this.material.uniforms.uGodrayStrength, 'value').min(0).max(60).step(0.001).name('godrayStrength')
-            this.debugFolder.add(this.material.uniforms.uGodrayTreshold, 'value').min(0).max(60).step(0.001).name('godrayTreshold')
+            this.debugFolder.add(this.material.uniforms.uGodrayTreshold, 'value').min(0).max(15).step(0.001).name('godrayTreshold')
             this.debugFolder.add(this.material.uniforms.uGodraySpeed, 'value').min(0).max(1).step(0.001).name('godraySpeed')
             this.debugFolder.addColor(this.parameters, 'color').onChange(() => {this.material.uniforms.uColor.value.set(this.parameters.color)})
 

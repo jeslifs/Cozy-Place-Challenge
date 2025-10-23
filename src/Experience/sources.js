@@ -32,7 +32,7 @@ export default [
     {
         name: 'cozyplace',
         type: 'gltfModel',
-        path: 'models/Place/place.glb'
+        path: 'models/Place/cozyplace.glb'
     },
     {
     
