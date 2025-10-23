@@ -48,7 +48,7 @@ export default class Dance
     update()
     {
         this.animation.mixer.update(this.time.delta * 0.0005)
-        this.model.rotation.y += Math.PI * 0.0006
+        this.model.rotation.y += Math.PI * 0.00009
         // this.model.position.x = Math.sin(this.time.delta * 0.05)
         // this.model.position.z = Math.cos(this.time.delta * 0.05)
     }
