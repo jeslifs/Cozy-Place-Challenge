@@ -14,7 +14,7 @@ export default class FireFlies
         this.debug = this.experience.debug
 
         this.FireFliesParameters = {
-            count: 40,
+            count: 100,
             // color: '#ffffff',
             color: '#ffe070'
         }
