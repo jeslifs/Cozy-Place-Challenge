@@ -61,12 +61,12 @@ export default class Song
 
             if(this.ismuted)
             {
-                this.song.volume = 0
+                this.song.muted = true
                 this.mutebutton.innerHTML = this.mutesvg
             }
             else
             {
-                this.song.volume = 0.5
+                this.song.muted = false
                 this.mutebutton.innerHTML = this.unmutesvg
             }
         })
