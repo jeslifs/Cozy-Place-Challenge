@@ -10,10 +10,49 @@ body
     overflow: hidden;
 }
 
+.settings
+{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+    z-index: 2;
+}
+
+.settings button {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.settings button {
+    cursor: pointer;
+}
+
+
 .webgl
 {
     position: fixed;
     top: 0;
     left: 0;
     outline: none;
+    z-index: 1;
+}
+
+.credits
+{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: #ffffff;
+    text-align: right;
+    font-family: 'Serif', sans-serif;
+    z-index: 2;
+}
+
+.credits a
+{
+    color: inherit;
 }
