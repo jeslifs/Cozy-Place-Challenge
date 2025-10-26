@@ -29,9 +29,9 @@ export default class Godray
 
         this.parameters = {
             radiusTop: 0.54,
-            radiusBottom: 1.23,
+            radiusBottom: 1.29,
             height: 9.22,
-            radialSegments: 13,
+            radialSegments: 16,
             heightSegments: 1,
             color: 0x70e7ff,
         }
@@ -90,7 +90,7 @@ export default class Godray
     {
         this.godray = new THREE.Mesh(this.geometry, this.material)
         this.godray.position.y = 2.66
-        this.godray.position.x = 1.789
+        this.godray.position.x = 1.715
         this.godray.position.z = -1.358
         this.godray.rotation.x = 2.817
         this.godray.rotation.y = -0.117

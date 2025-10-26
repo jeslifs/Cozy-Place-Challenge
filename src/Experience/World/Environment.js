@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 import Experience from '../Experience'
 import Bushs from './Bushs'
 import Fire from './Fire'
@@ -16,26 +17,42 @@ export default class Environment
         this.tent = tent
 
         // Parameters
+
+        this.spotLightParameters = {
+            color: '#B6F9FF',
+            intensity: 85.5,
+            distance: 8,
+            angle: 0.29,
+            penumbra: 0.25,
+            decay: 3.42,
+            target: new THREE.Vector3(0, 0, 0)
+        }
+
         this.ambientLightParameters = {
             color: '#B6F9FF',
             // color:0x000fe6,
             // intensity: 0.375,
-            intensity: 0.159,
+            // intensity: 0.159,
+            intensity: 0.07,
         }
 
         this.directionalLight1Parameters = {
             color: '#6F85FF',
-            intensity: 1.216,
+            intensity: 0.955,
+            // intensity: 1.216,
         }
 
         this.directionalLight2Parameters = {
             color: '#FF9CB1',
-            intensity: 0.156,
+            intensity: 0.07,
+            // intensity: 0.156,
         }
 
         this.campLightParameters = {
-            color: '#ff9500',
-            intensity: 0.481
+            // color: '#ff9500',
+            color: '#fc6900',
+            intensity: 6.8,
+            // intensity: 0.481
         }
 
         // bush setup
@@ -58,7 +75,105 @@ export default class Environment
         this.setFire()
         this.setSmoke()
         this.setCampLights()
+        this.setSpotLight()
+        this.setReveal()
         this.setEnvironmentMap()
+    }
+
+    setReveal(duration = 5.0)
+    {
+
+        const timeLine = gsap.timeline()
+        const animationStart = { value: 0 }
+        const targets = {
+            ambient: this.ambientLightParameters.intensity,
+            dir1: this.directionalLight1Parameters.intensity,
+            dir2: this.directionalLight2Parameters.intensity,
+            camp: this.campLightParameters.intensity,
+            spot: this.spotLightParameters.intensity,
+        }
+
+        timeLine.to(this.spotLight, {
+            intensity: targets.spot,
+            duration: 1.5,
+            delay: 0.75,
+            ease: 'power1.easeIn'
+        })
+
+        timeLine.to(animationStart, {
+            value: 1,
+            duration: duration,
+            ease: 'Power2.easeIn',
+            onUpdate: () => {
+                const progress = animationStart.value
+
+                this.ambientLight.intensity = THREE.MathUtils.lerp(0, targets.ambient, progress)
+                this.directionalLight1.intensity = THREE.MathUtils.lerp(0, targets.dir1, progress)
+                this.directionalLight2.intensity = THREE.MathUtils.lerp(0, targets.dir2, progress)
+                this.campLight.intensity = THREE.MathUtils.lerp(0, targets.camp, progress)
+                // this.spotLight.intensity = THREE.MathUtils.lerp(0, targets.spot, progress)
+
+                if(this.bush && this.bush.material)
+                {
+                    this.bush.material.uniforms.uAmbientLightIntensity.value = this.ambientLight.intensity
+                    this.bush.material.uniforms.uDirectionalLigt1Intensity.value = this.directionalLight1.intensity
+                    this.bush.material.uniforms.uDirectionalLigt2Intensity.value = this.directionalLight2.intensity
+                }
+            }
+        }, '-=1')
+    }
+
+    setSpotLight()
+    {
+        this.spotLight = new THREE.SpotLight(this.spotLightParameters.color, 0, this.spotLightParameters.distance, this.spotLightParameters.angle, this.spotLightParameters.penumbra, this.spotLightParameters.decay)
+        // this.spotLight.castShadow = true
+
+        this.spotLight.shadow.mapSize.width = 1024
+        this.spotLight.shadow.mapSize.height = 1024
+        this.spotLight.shadow.camera.near = 1
+        this.spotLight.shadow.camera.far = 5
+        this.spotLight.shadow.camera.fov = 20
+
+        this.spotLight.position.y = 2.66
+        this.spotLight.position.x = 2.32
+        this.spotLight.position.z = -1.358
+
+
+        // this.sportLightTarget = new THREE.Mesh(
+        //     new THREE.SphereGeometry(.5),
+        //     new THREE.MeshBasicMaterial()
+        // )
+        this.sportLightTarget = new THREE.Object3D()
+        this.sportLightTarget.position.set(0.238, -0.2839, -0.2839)
+        this.sportLightTarget.rotation.x = 2.817
+        this.sportLightTarget.rotation.y = -0.117
+        this.sportLightTarget.rotation.z = -2.66
+        this.spotLight.target = this.sportLightTarget
+
+        this.scene.add(this.spotLight, 
+            this.sportLightTarget
+        )
+
+        if(this.debug.active)
+        {   
+            this.spotLightHelpher = new THREE.SpotLightHelper(this.spotLight)
+            this.spotLightFolder = this.debugFolder.addFolder('Spot Light')
+            this.spotLightFolder.close()
+            this.spotLightFolder.add(this.spotLight, 'intensity').min(0).max(100).step(0.001).name('spotLightIntensity')
+            this.spotLightFolder.add(this.spotLight, 'distance').min(0.1).max(10).step(0.01).name('spotLightDistance')
+            this.spotLightFolder.add(this.spotLight, 'angle').min(0.1).max(Math.PI / 2).step(0.01).name('spotLightAngle')
+            this.spotLightFolder.add(this.spotLight, 'penumbra').min(0).max(1).step(0.01).name('spotLightPenumbra')
+            this.spotLightFolder.add(this.spotLight, 'decay').min(0).max(10).step(0.01).name('spotLightDecay')
+            this.spotLightFolder.add(this.spotLight.position, 'x').min(-10).max(10).name('spotLightX').onChange(() => this.spotLightHelpher.position.set(this.spotLight.position))
+            this.spotLightFolder.add(this.spotLight.position, 'y').min(-10).max(10).name('spotLightY').onChange(() => this.spotLightHelpher.position.set(this.spotLight.position))
+            this.spotLightFolder.add(this.spotLight.position, 'z').min(-10).max(10).name('spotLightZ').onChange(() => this.spotLightHelpher.position.set(this.spotLight.position))
+            this.spotLightFolder.add(this.sportLightTarget.position, 'x').min(-10).max(10).step(0.001).name('spotLightTargetX')
+            this.spotLightFolder.add(this.sportLightTarget.position, 'y').min(-10).max(10).step(0.001).name('spotLightTargetY')
+            this.spotLightFolder.add(this.sportLightTarget.position, 'z').min(-10).max(10).step(0.001).name('spotLightTargetZ')
+            this.spotLightFolder.addColor(this.spotLightParameters, 'color').name('spotLightColor').onChange(()=> this.spotLight.color.set(this.spotLightParameters.color))
+            this.spotLightFolder.add(this.spotLightHelpher, 'visible')
+            this.scene.add(this.spotLightHelpher)
+        }
     }
 
     setFire()
@@ -75,15 +190,16 @@ export default class Environment
 
     setCampLights()
     {
-        this.campLight = new THREE.PointLight(this.campLightParameters.color, this.campLightParameters.intensity)
-        this.campLight.position.set(-1.42, -0.009, -1.03)
+        this.campLight = new THREE.PointLight(this.campLightParameters.color, 0, 10, 2)
+        this.campLight.position.set(-1.42, 0.2, -1.03)
+        this.campLight.castShadow = false
         this.scene.add(this.campLight)
 
         if(this.debug.active)
         {
             this.campFolder = this.debugFolder.addFolder('Point Light')
             this.campFolder.close()
-            this.campFolder.add(this.campLight, 'intensity').min(0).max(2).step(0.001).name('campLightIntensity')
+            this.campFolder.add(this.campLight, 'intensity').min(0).max(10).step(0.001).name('campLightIntensity')
             this.campFolder.add(this.campLight.position, 'x').min(-5).max(5).name('campLightX')
             this.campFolder.add(this.campLight.position, 'y').min(-5).max(5).name('campLightY')
             this.campFolder.add(this.campLight.position, 'z').min(-5).max(5).name('campLightZ')     
@@ -95,7 +211,8 @@ export default class Environment
     setEnvironmentMap()
     {
         this.environmentMap = {}
-        this.environmentMap.intensity = 0.46
+        // this.environmentMap.intensity = 0.46
+        this.environmentMap.intensity = 0
         this.environmentMap.texture = this.resources.items.environmentMapTexture
         // console.log(this.environmentMap.texture);
         
@@ -129,7 +246,7 @@ export default class Environment
 
     setAmbientLight()
     {
-        this.ambientLight = new THREE.AmbientLight(this.ambientLightParameters.color, this.ambientLightParameters.intensity)
+        this.ambientLight = new THREE.AmbientLight(this.ambientLightParameters.color, 0)
         this.scene.add(this.ambientLight)
 
         // Debug
@@ -152,7 +269,7 @@ export default class Environment
 
     setDirectionalLights()
     {
-        this.directionalLight1 = new THREE.DirectionalLight(this.directionalLight1Parameters.color, this.directionalLight1Parameters.intensity)
+        this.directionalLight1 = new THREE.DirectionalLight(this.directionalLight1Parameters.color, 0)
         this.directionalLight1.position.set(5, 3.93, -5)
         // this.directionalLight1.rotation.set(-0.1295, 1.507, 0)
         // this.directionalLight1.target.position.set(0.276, 1.711, -5)
@@ -166,8 +283,9 @@ export default class Environment
         this.directionalLight1.shadow.camera.bottom = -3.1
         this.directionalLight1.shadow.camera.left = -5.5
         this.directionalLight1.shadow.camera.right = 5.2
+        this.directionalLight1.shadow.mapSize.set(1024 / 4, 1024 / 4)
 
-        this.directionalLight2 = new THREE.DirectionalLight(this.directionalLight2Parameters.color, this.directionalLight2Parameters.intensity)
+        this.directionalLight2 = new THREE.DirectionalLight(this.directionalLight2Parameters.color, 0)
         this.directionalLight2.position.set(-5, 1.972, -3.77)
         this.directionalLight2.rotation.set(0.2764, -0.3685, 0.9624)
         this.directionalLight2.target.position.set(-4.553, 1.32, 0.276)
