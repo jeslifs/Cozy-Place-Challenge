@@ -1,3 +1,5 @@
+<img width="1910" height="957" alt="image" src="https://github.com/user-attachments/assets/efcfe213-fa60-49de-b457-9f084af9b90f" />
+
 # Cozy Place Challenge
 
 ## Setup
