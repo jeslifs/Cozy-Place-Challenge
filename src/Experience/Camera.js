@@ -26,8 +26,9 @@ export default class Camera
             0.1,
             100000
         )
-        // this.instance.position.set(-0.0158, 3.0054, 7.9365)
-        this.instance.position.set(0.0226, 4.3036, 11.3648)
+        // this.instance.position.set(-0.0158, 3.0054, 7.9365)959052838652, y: 913530970376, z: 48
+        // this.instance.position.set(0.0226, 4.3036, 11.3648)
+        this.instance.position.set(-6.396, 1.1476, 10.268)
         this.instance.lookAt(0, 0, 0)
         this.scene.add(this.instance)
         
